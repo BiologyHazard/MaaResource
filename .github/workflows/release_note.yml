@@ -20,10 +20,10 @@ jobs:
           gacha_time=$(echo $data | jq -r .gacha.time)
           if [ $activity_time -ge $gacha_time ]; then
             release_note=$(echo $data | jq -r .activity.name)
+            release_note=$(echo $data | jq -r .gacha.pool)
           else
             release_note=$(echo $data | jq -r .gacha.pool)
           fi
-            
           
           echo "version=$version" | tee -a "$GITHUB_OUTPUT"
           echo "release_note=$release_note" | tee -a "$GITHUB_OUTPUT"
