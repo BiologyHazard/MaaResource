@@ -1,4 +1,4 @@
-name: mirrorchyan
+name: mirrorchyan_release_note
 
 on:
   push:
@@ -20,10 +20,20 @@ jobs:
           gacha_time=$(echo $data | jq -r .gacha.time)
           if [ $activity_time -ge $gacha_time ]; then
             release_note=$(echo $data | jq -r .activity.name)
-            release_note=$(echo $data | jq -r .gacha.pool)
           else
             release_note=$(echo $data | jq -r .gacha.pool)
           fi
           
           echo "version=$version" | tee -a "$GITHUB_OUTPUT"
           echo "release_note=$release_note" | tee -a "$GITHUB_OUTPUT"
+
+      - 
+        uses: MirrorChyan/release-note-action@v1
+        with:
+          mirrorchyan_rid: MaaResource
+
+          version_name: ${{ steps.version_name.outputs.version }}
+          release_note: ${{ steps.version_name.outputs.release_note }}
+          
+          upload_token: ${{ secrets.MirrorChyanUploadToken }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
